@@ -24,6 +24,14 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
         `https://exercisedb.p.rapidapi.com/exercises`,
         exerciseOptions,
       );
+      console.log("search:", search);
+      console.log("exercisesData:", exercisesData);
+      console.log("isArray?", Array.isArray(exercisesData));
+
+      if (!Array.isArray(exercisesData)) {
+        console.log("Unexpected response:", exercisesData);
+        return;
+      }
 
       const searchedExercises = exercisesData.filter(
         (exercise) =>
@@ -32,6 +40,9 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
           exercise.equipment.toLowerCase().includes(search) ||
           exercise.bodyPart.toLowerCase().includes(search),
       );
+
+      console.log("searchedExercises:", searchedExercises);
+
       setSearch("");
       setExercises(searchedExercises);
     }
