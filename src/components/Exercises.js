@@ -1,31 +1,32 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
+import ExerciseCard from "./ExerciseCard";
 
 const Exercises = ({ exercises, setExercises, bodyPart }) => {
   console.log(exercises);
 
-  // useEffect(() => {
-  //   const fetchExercisesData = async () => {
-  //     let exercisesData = [];
+  useEffect(() => {
+    const fetchExercisesData = async () => {
+      let exercisesData = [];
 
-  //     if (bodyPart === "all") {
-  //       exercisesData = await fetchData(
-  //         "https://exercisedb.p.rapidapi.com/exercises",
-  //         exerciseOptions,
-  //       );
-  //     } else {
-  //       exercisesData = await fetchData(
-  //         `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,
-  //         exerciseOptions,
-  //       );
-  //     }
+      if (bodyPart === "all") {
+        exercisesData = await fetchData(
+          "https://exercisedb.p.rapidapi.com/exercises",
+          exerciseOptions,
+        );
+      } else {
+        exercisesData = await fetchData(
+          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,
+          exerciseOptions,
+        );
+      }
 
-  //     setExercises(exercisesData);
-  //   };
+      setExercises(exercisesData);
+    };
 
-  //   fetchExercisesData();
-  // }, [bodyPart, setExercises]);
+    fetchExercisesData();
+  }, [bodyPart, setExercises]);
 
   return (
     <Box id="exercises" sx={{ mt: { lg: "110px" } }} mt="50px" p="20px">
@@ -40,7 +41,7 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
         justifyContent="center"
       >
         {exercises.map((exercise, index) => (
-          <p>{exercise.name}</p>
+          <ExerciseCard key={index} exercise={exercise} />
         ))}
       </Stack>
     </Box>

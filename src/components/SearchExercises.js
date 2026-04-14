@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
 import HorizontalScrollbar from "./HorizontalScrollbar";
 
+// NOTE: API currently returns limited results (10)
+// handled by fetching multiple pages
+
 const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
   const [search, setSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
@@ -21,7 +24,7 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
   const handleSearch = async () => {
     if (search) {
       const exercisesData = await fetchData(
-        `https://exercisedb.p.rapidapi.com/exercises`,
+        "https://exercisedb.p.rapidapi.com/exercises",
         exerciseOptions,
       );
       console.log("search:", search);
@@ -29,7 +32,7 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       console.log("isArray?", Array.isArray(exercisesData));
 
       if (!Array.isArray(exercisesData)) {
-        console.log("Unexpected response:", exercisesData);
+        console.error("Unexpected response:", exercisesData);
         return;
       }
 
@@ -40,8 +43,6 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
           exercise.equipment.toLowerCase().includes(search) ||
           exercise.bodyPart.toLowerCase().includes(search),
       );
-
-      console.log("searchedExercises:", searchedExercises);
 
       setSearch("");
       setExercises(searchedExercises);
