@@ -40,6 +40,7 @@ const ExerciseCard = ({ exercise }) => {
         mt="11px"
         pb="10px"
         textTransform="capitalize"
+        fontSize="20px"
       >
         {exercise.name}
       </Typography>
