@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
 import HorizontalScrollbar from "./HorizontalScrollbar";
 
-// NOTE: API currently returns limited results (10)
-// handled by fetching multiple pages
-
 const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
   const [search, setSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
@@ -18,34 +15,30 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       );
       setBodyParts(["all", ...bodyPartsData]);
     };
+
     fetchExercisesData();
   }, []);
 
   const handleSearch = async () => {
-    if (search) {
-      const exercisesData = await fetchData(
-        "https://exercisedb.p.rapidapi.com/exercises",
+    if (!search.trim()) return;
+
+    try {
+      const searchedExercises = await fetchData(
+        `https://exercisedb.p.rapidapi.com/exercises/name/${search}?limit=10&sortOrder=ascending&sortMethod=bodyPart&offset=0`,
         exerciseOptions,
       );
-      console.log("search:", search);
-      console.log("exercisesData:", exercisesData);
-      console.log("isArray?", Array.isArray(exercisesData));
 
-      if (!Array.isArray(exercisesData)) {
-        console.error("Unexpected response:", exercisesData);
+      if (!Array.isArray(searchedExercises)) {
+        console.error("Unexpected response:", searchedExercises);
         return;
       }
 
-      const searchedExercises = exercisesData.filter(
-        (exercise) =>
-          exercise.name.toLowerCase().includes(search) ||
-          exercise.target.toLowerCase().includes(search) ||
-          exercise.equipment.toLowerCase().includes(search) ||
-          exercise.bodyPart.toLowerCase().includes(search),
-      );
-
       setSearch("");
       setExercises(searchedExercises);
+
+      window.scrollTo({ top: 1800, left: 100, behavior: "smooth" });
+    } catch (error) {
+      console.error("Search failed:", error);
     }
   };
 
@@ -59,6 +52,7 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
       >
         Awesome Exercises you <br /> Should Know
       </Typography>
+
       <Box position="relative" mb="72px">
         <TextField
           sx={{
@@ -69,12 +63,11 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
           }}
           height="76px"
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
           placeholder="Search exercises"
           type="text"
         />
+
         <Button
           className="search-btn"
           sx={{
@@ -92,6 +85,7 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
           Search
         </Button>
       </Box>
+
       <Box sx={{ position: "relative", width: "100%", p: "20px" }}>
         <HorizontalScrollbar
           data={bodyParts}

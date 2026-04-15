@@ -12,7 +12,7 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
 
       if (bodyPart === "all") {
         exercisesData = await fetchData(
-          "https://exercisedb.p.rapidapi.com/exercises",
+          "https://exercisedb.p.rapidapi.com/exercises?sortMethod=bodyPart&offset=0&limit=10&sortOrder=ascending",
           exerciseOptions,
         );
       } else {
@@ -34,16 +34,22 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
         Showing Results
       </Typography>
 
-      <Stack
-        direction="row"
-        sx={{ gap: { lg: "110px", xs: "50px" } }}
-        flexWrap="wrap"
-        justifyContent="center"
-      >
-        {exercises.map((exercise, index) => (
-          <ExerciseCard key={index} exercise={exercise} />
-        ))}
-      </Stack>
+      {exercises.length === 0 ? (
+        <Typography variant="h6" textAlign="center" mt="40px">
+          No results found 😢
+        </Typography>
+      ) : (
+        <Stack
+          direction="row"
+          sx={{ gap: { lg: "110px", xs: "50px" } }}
+          flexWrap="wrap"
+          justifyContent="center"
+        >
+          {exercises.map((exercise) => (
+            <ExerciseCard key={exercise.id} exercise={exercise} />
+          ))}
+        </Stack>
+      )}
     </Box>
   );
 };
