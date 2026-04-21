@@ -58,7 +58,9 @@ body {
   top: 0px;
   width: 700px;
   height: 900px;
+  object-fit: cover;
   margin-top: -330px;
+  border-bottom-left-radius: 95px;
 }
 
 .exercise-card {
