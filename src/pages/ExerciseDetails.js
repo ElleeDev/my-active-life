@@ -25,9 +25,10 @@ const ExerciseDetails = () => {
 
     fetchExerciseData();
   }, [id]);
+
   return (
     <Box>
-      <Detail />
+      <Detail exerciseDetail={exerciseDetail} />
       <ExerciseVideos />
       <SimilarExercises />
     </Box>
