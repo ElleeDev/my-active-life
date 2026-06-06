@@ -22,12 +22,12 @@ const ExerciseDetails = () => {
         exerciseOptions,
       );
       setExerciseDetail(exerciseDetailData);
-      setExerciseVideos(exerciseVideosData);
 
       const exerciseVideosData = await fetchData(
         `${youtubeSearchUrl}/search?q=${exerciseDetailData.name}`,
         youtubeOptions,
       );
+      setExerciseVideos(exerciseVideosData);
     };
 
     fetchExerciseData();
